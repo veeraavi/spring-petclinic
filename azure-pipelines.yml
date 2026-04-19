@@ -27,7 +27,7 @@ stages:
             extraProperties: |
               sonar.projectKey=spring_petclinic
               sonar.projectName=spring_petclinic
-
+              sonar.branch.name=
         - task: JavaToolInstaller@1
           inputs:
             versionSpec: '17'
