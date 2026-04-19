@@ -1,0 +1,67 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+ branches:
+  include:
+    - main
+ paths:
+  exclude:
+    - README.MD
+
+pool:
+  vmImage: ubuntu-latest  
+
+stages:
+ - stage: 
+   displayName: Build Stage
+   jobs:
+     - job: Build
+       steps:
+        - task: SonarQubePrepare@8
+          inputs:
+            SonarQube: 'sonarqube'
+            scannerMode: 'other'
+            extraProperties: |
+              sonar.projectKey=spring_petclinic
+              sonar.projectName=spring_petclinic
+
+        - task: JavaToolInstaller@1
+          inputs:
+            versionSpec: '17'
+            jdkArchitectureOption: 'x64'
+            jdkSourceOption: 'PreInstalled'
+
+        - task: Maven@4
+          inputs:
+            azureSubscription: 'pay-as-you-go (b53dc0e2-0513-4508-8dec-bc5e9e5d36ae)'
+            mavenPomFile: 'pom.xml'
+            goals: 'clean package'
+            publishJUnitResults: true
+            testResultsFiles: '**/surefire-reports/TEST-*.xml'
+            codeCoverageToolOption: 'JaCoCo'
+            codeCoverageFailIfEmpty: true
+            javaHomeOption: 'JDKVersion'
+            mavenVersionOption: 'Default'
+            mavenAuthenticateFeed: false
+            effectivePomSkip: false
+            sonarQubeRunAnalysis: true
+            sqMavenPluginVersionChoice: 'latest'
+
+        - task: SonarQubePublish@8
+          inputs:
+            pollingTimeoutSec: '300'
+
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(System.DefaultWorkingDirectory)'
+            Contents: '**/target/*.?(war|jar)'
+            TargetFolder: '$(build.artifactstagingdirectory)'
+
+        - task: PublishBuildArtifacts@1
+          inputs:
+            PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            ArtifactName: 'drop'
+            publishLocation: 'Container'
