@@ -38,7 +38,7 @@ stages:
           inputs:
             azureSubscription: 'pay-as-you-go (b53dc0e2-0513-4508-8dec-bc5e9e5d36ae)'
             mavenPomFile: 'pom.xml'
-            goals: 'clean package'
+            goals: 'clean package sonar:sonar -Dsonar.branch.name='
             publishJUnitResults: true
             testResultsFiles: '**/surefire-reports/TEST-*.xml'
             codeCoverageToolOption: 'JaCoCo'
