@@ -5,5 +5,5 @@ jobs:
   -FirstJob:
   runs-on: ubuntu-latest
   steps:
-    - name: First Step
+    -name: First Step
     run: echo "First Step Executed"
