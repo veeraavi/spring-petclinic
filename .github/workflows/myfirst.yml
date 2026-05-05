@@ -2,8 +2,8 @@
 name: My first workflow
 on: webflow_dispatch
 jobs:
-  -FirstJob:
-  runs-on: ubuntu-latest
-  steps:
-    -name: First Step
-    run: echo "First Step Executed"
+  FirstJob:
+    runs-on: ubuntu-latest
+    steps:
+      - name: First Step
+      run: echo "First Step Executed"
