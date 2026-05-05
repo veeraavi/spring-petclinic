@@ -1,0 +1,9 @@
+# This is my own first workflow  
+name: My first workflow
+on: webflow_dispatcher
+jobs:
+  -FirstJob:
+  runs-on: ubuntu-latest
+  steps:
+    -name: First Step
+    run: echo "First Step Executed"
